@@ -1,6 +1,7 @@
 import uuid
+from typing import Optional, List
 
-from pydantic import EmailStr
+from pydantic import EmailStr, BaseModel
 from sqlmodel import Field, Relationship, SQLModel
 
 
@@ -111,3 +112,14 @@ class TokenPayload(SQLModel):
 class NewPassword(SQLModel):
     token: str
     new_password: str = Field(min_length=8, max_length=40)
+
+class Movie(BaseModel):
+    id: int
+    imdb_id: Optional[str]
+    title: str
+    year: Optional[int]
+    vote_count: Optional[int]
+    vote_average: Optional[float]
+    popularity: Optional[float]
+    genres: str
+    wr: Optional[float]

@@ -2,9 +2,11 @@ import uuid
 from typing import Any
 
 from sqlmodel import Session, select
+import pandas as pd
 
+from app.core.ml_compute import build_chart
 from app.core.security import get_password_hash, verify_password
-from app.models import Item, ItemCreate, User, UserCreate, UserUpdate
+from app.models import Item, ItemCreate, User, UserCreate, UserUpdate, Movie
 
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
@@ -52,3 +54,17 @@ def create_item(*, session: Session, item_in: ItemCreate, owner_id: uuid.UUID) -
     session.commit()
     session.refresh(db_item)
     return db_item
+
+def recommend_by_genres(*, session: Session, genres: list[str], limit: int = 10) -> list[Movie]:
+    # truy van db
+    #  do something
+    # load to pandas
+    movies_data = pd.read_csv("app/data/movies_simplify.csv")
+    genres_data = pd.read_csv("app/data/genres.csv")
+    merged = pd.merge(genres_data, movies_data, left_on='id', right_on='id')
+    filtered = merged[merged['genre'].isin(genres)]
+
+    qualified = build_chart(filtered, 0.85, limit)
+    movie_list = [Movie(**row) for row in qualified.to_dict(orient="records")]
+
+    return movie_list
