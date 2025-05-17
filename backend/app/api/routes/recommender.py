@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from app import crud
+from app import crud, constants
 from app.models import Movie
 
 from pydantic import BaseModel
@@ -35,4 +35,48 @@ def recommend_movies_by_genres(
 
     return GenreRecommendationResponse(recommendations=recommended_movies)
 
+class SearchRequest(BaseModel):
+    keyword: str
+    search_type: str
+
+class SearchResponse(BaseModel):
+    recommendations: List[Movie]
+
+@router.post("/search", response_model=GenreRecommendationResponse)
+def recommend_movies_by_genre(
+    *,
+    session: SessionDep,
+    request_body: SearchResponse,
+):
+    if request_body.search_type not in constants.SEARCH_TYPE:
+        raise HTTPException(status_code=400, detail="Invalid search type. must in {}".format(constants.SEARCH_TYPE))
+
+    recommended_movies = crud.recommend_by_keywords(
+        session=session,
+        keywords=request_body.keyword,
+        search_type=request_body.search_type,
+    )
+
+    return SearchResponse(recommendations=recommended_movies)
+
+class ContentRecommendationRequest(BaseModel):
+    movies_id: int
+
+class ContentRecommendationResponse(BaseModel):
+    recommendations: List[Movie]
+
+@router.post("/content-base", response_model=GenreRecommendationResponse)
+def recommend_movies_by_genre(
+    *,
+    session: SessionDep,
+    request_body: ContentRecommendationRequest,
+):
+
+    recommended_movies = crud.recommend_by_keywords(
+        session=session,
+        keywords=request_body.keyword,
+        search_type=request_body.search_type,
+    )
+
+    return ContentRecommendationResponse(recommendations=recommended_movies)
 

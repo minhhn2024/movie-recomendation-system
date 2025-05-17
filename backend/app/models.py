@@ -115,11 +115,26 @@ class NewPassword(SQLModel):
 
 class Movie(BaseModel):
     id: int
+    imdb_id: Optional[str] = None
+    title: str
+    year: Optional[int] = None
+    vote_count: Optional[int] = None
+    vote_average: Optional[float] = None
+    popularity: Optional[float] = None
+    genres: str
+    wr: Optional[float] = None
+
+class Movie2(BaseModel):
+    id: int
+    collections: Optional[str]
     imdb_id: Optional[str]
     title: str
+    overview: Optional[str]
+    tagline: Optional[str]
     year: Optional[int]
     vote_count: Optional[int]
     vote_average: Optional[float]
     popularity: Optional[float]
-    genres: str
+    genres: Optional[str]
     wr: Optional[float]
+    relevance: Optional[float]
