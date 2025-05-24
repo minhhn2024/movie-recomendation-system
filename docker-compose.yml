@@ -11,6 +11,7 @@ services:
       timeout: 10s
     volumes:
       - app-db-data:/var/lib/postgresql/data/pgdata
+      - ./backend/app/init-db:/docker-entrypoint-initdb.d
     env_file:
       - .env
     environment:
@@ -162,6 +163,35 @@ services:
 
       # Enable redirection for HTTP and HTTPS
       - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.middlewares=https-redirect
+
+  frontend-dash:
+    image: '${DOCKER_IMAGE_FRONTEND_DASH?Variable not set}:${TAG-latest}'
+    build:
+      context: ./frontend-dash
+    restart: always
+    ports:
+      - "8050:8050"
+    networks:
+      - traefik-public
+      - default
+    environment:
+      - BACKEND_URL=https://api.${DOMAIN}
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik-public
+      - traefik.constraint-label=traefik-public
+
+      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-dash-http.rule=Host(`dash.${DOMAIN}`)
+      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-dash-http.entrypoints=http
+      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-dash-http.middlewares=https-redirect
+
+      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-dash-https.rule=Host(`dash.${DOMAIN}`)
+      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-dash-https.entrypoints=https
+      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-dash-https.tls=true
+      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-dash-https.tls.certresolver=le
+
+      - traefik.http.services.${STACK_NAME?Variable not set}-frontend-dash.loadbalancer.server.port=8050
+
 volumes:
   app-db-data:
 
