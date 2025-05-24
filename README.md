@@ -21,3 +21,4 @@ https://drive.google.com/file/d/1EA_-KxgpwDybeFwbBEK6eukqKPk0xwjr/view?usp=shari
 
 now in docker desktop we have a compose task 
 ![image](https://github.com/user-attachments/assets/8888224e-164f-4905-8bf8-7e76edaf7af7)
+go to visit `http://localhost:5173/` 
