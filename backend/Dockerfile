@@ -35,6 +35,10 @@ COPY ./pyproject.toml ./uv.lock ./alembic.ini /app/
 
 COPY ./app /app/app
 
+COPY ./app/matrix-factorial/model_SVD.pkl /app/app/matrix-factorial/model_SVD.pkl
+
+COPY ./app/vector-embedding /app/app/vector-embedding
+
 # Sync the project
 # Ref: https://docs.astral.sh/uv/guides/integration/docker/#intermediate-layers
 RUN --mount=type=cache,target=/root/.cache/uv \

@@ -1,0 +1,6 @@
+.venv\Scripts\python.exe -m ensurepip --upgrade
+.venv\Scripts\python.exe -m pip install faiss-cpu==1.7.4
+.venv\Scripts\python.exe -m pip install sentence-transformers
+.venv\Scripts\python.exe -m pip install psycopg2
+
+.venv\Scripts\python.exe -m pip install scikit-surprise
