@@ -381,3 +381,30 @@ def collaborative_filtering_recommendation(
 
     return MovieRecommendationResponse(recommendations=list_suggest_movie)
 
+class UserIdsResponse(BaseModel):
+    userIds: List[int]
+
+@router.get("/all-users", response_model=UserIdsResponse)
+def get_user_ids(session: SessionDep) -> UserIdsResponse:
+    try:
+        # Truy vấn lấy user_id duy nhất, sắp xếp tăng dần
+        query = text("""
+            SELECT DISTINCT user_id
+            FROM stg_rating
+            ORDER BY RANDOM()
+            LIMIT 100
+        """)
+        result = session.execute(query).fetchall()
+
+        # Kiểm tra kết quả
+        if not result:
+            raise HTTPException(status_code=404, detail="Không tìm thấy userId nào trong bảng stg_rating")
+
+        # Lấy danh sách userId
+        user_ids = [row[0] for row in result]
+
+        return UserIdsResponse(userIds=user_ids)
+
+    except Exception as e:
+        # Xử lý lỗi
+        raise HTTPException(status_code=500, detail=f"Lỗi khi truy vấn bảng stg_rating: {str(e)}")
