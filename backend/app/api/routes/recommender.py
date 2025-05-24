@@ -389,10 +389,13 @@ def get_user_ids(session: SessionDep) -> UserIdsResponse:
     try:
         # Truy vấn lấy user_id duy nhất, sắp xếp tăng dần
         query = text("""
-            SELECT DISTINCT user_id
-            FROM stg_rating
+            SELECT user_id
+            FROM (
+                SELECT DISTINCT user_id
+                FROM stg_rating
+            ) AS subquery
             ORDER BY RANDOM()
-            LIMIT 100
+            LIMIT 100;
         """)
         result = session.execute(query).fetchall()
 

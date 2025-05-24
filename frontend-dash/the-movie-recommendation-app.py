@@ -9,15 +9,15 @@ import os
 OMDB_API_KEY = 'd3e2b7b7'
 
 def get_token(username="admin@example.com", password="changethis"):
-    url = "http://backend:8000/api/v1/login/access-token"
+    url = "http://localhost:8000/api/v1/login/access-token"
     payload = {
         'username': username,
         'password': password
     }
     headers = {
         'Accept': 'application/json',
-        'Origin': 'http://backend:5173',
-        'Referer': 'http://backend:5173/'
+        'Origin': 'http://localhost:5173',
+        'Referer': 'http://localhost:5173/'
     }
     response = requests.post(url, headers=headers, data=payload)
     if response.status_code == 200:
@@ -40,7 +40,7 @@ all_genres = ['Action', 'Adventure', 'Animation', 'Aniplex', 'BROSTA TV', 'Carou
 all_movies = df['original_title'].dropna().unique().tolist()
 
 def fetch_all_api_genres():
-    url = "http://backend:8000/api/v1/genres"
+    url = "http://localhost:8000/api/v1/genres"
     payload = {}
     headers = {
         'accept': 'application/json'
@@ -58,7 +58,7 @@ all_api_genres = fetch_all_api_genres()
 # sau khi lấy dữ liệu genres thì trích xuất ra danh sách genre và truyền vào all_genres
 
 def fetch_all_api_movies(token: str = "", skip: int = 0, limit: int = 10):
-    url = "http://backend:8000/api/v1/movies"
+    url = "http://localhost:8000/api/v1/movies"
     headers = {
         'Authorization': f'Bearer {token}',
         'Content-Type': 'application/json'
@@ -108,7 +108,7 @@ def func_suggestions_by_movies_api_content_base(df: pd.DataFrame, title: str, nu
     movie_id = movie_row.get('id')
     if pd.isna(movie_id):
         return pd.DataFrame()
-    url = "http://backend:8000/api/v1/recommender/content-base"
+    url = "http://localhost:8000/api/v1/recommender/content-base"
     payload = {
         "movieId": int(movie_id),
         "limit": num_suggestions
@@ -132,7 +132,7 @@ def func_suggestions_by_movies_api_collaborative_filtering(df: pd.DataFrame, tit
     movie_id = movie_row.get('id')
     if pd.isna(movie_id):
         return pd.DataFrame()
-    url = "http://backend:8000/api/v1/recommender/collaborative-filtering"
+    url = "http://localhost:8000/api/v1/recommender/collaborative-filtering"
     payload = {
         "movieId": int(movie_id),
         "limit": num_suggestions
@@ -152,7 +152,7 @@ def func_suggestions_by_genres_api(df: pd.DataFrame, genres: list, num_suggestio
 
     if not genres:
         return pd.DataFrame()
-    url = "http://backend:8000/api/v1/recommender/by-genres"
+    url = "http://localhost:8000/api/v1/recommender/by-genres"
     payload = {
         "genres": genres,
         "limit": num_suggestions
