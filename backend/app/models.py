@@ -1,4 +1,5 @@
 import uuid
+from datetime import date
 from typing import Optional, List
 
 from pydantic import EmailStr, BaseModel
@@ -113,28 +114,79 @@ class NewPassword(SQLModel):
     token: str
     new_password: str = Field(min_length=8, max_length=40)
 
-class Movie(BaseModel):
-    id: int
-    imdb_id: Optional[str] = None
-    title: str
-    year: Optional[int] = None
-    vote_count: Optional[int] = None
-    vote_average: Optional[float] = None
-    popularity: Optional[float] = None
-    genres: str
-    wr: Optional[float] = None
+class StgGenre(SQLModel, table=True):
+    __tablename__ = "stg_genre"
+    key_id: int = Field(primary_key=True)
+    movie_id: Optional[int] = Field(default=None, index=True)
+    genre: Optional[str] = Field(default=None)
 
-class Movie2(BaseModel):
+class StgCast(SQLModel, table=True):
+    __tablename__ = "stg_cast"
+    key_id: int = Field(primary_key=True)
+    movie_id: Optional[int] = Field(default=None, index=True)
+    name: Optional[str] = Field(default=None)
+    role: Optional[str] = Field(default=None)
+
+class StgMovieMetadata(SQLModel, table=True):
+    __tablename__ = "stg_movie_metadata"
+    id: int = Field(primary_key=True)
+    title: Optional[str] = Field(default=None)
+    original_title: Optional[str] = Field(default=None)
+    belongs_to_collection: Optional[str] = Field(default=None)
+    original_language: Optional[str] = Field(default=None)
+    release_date: Optional[date] = Field(default=None)  # Using str for simplicity
+    status: Optional[str] = Field(default=None)
+    overview: Optional[str] = Field(default=None)
+    tagline: Optional[str] = Field(default=None)
+    adult: Optional[str] = Field(default=None)
+    popularity: Optional[float] = Field(default=None)
+    homepage: Optional[str] = Field(default=None)
+    poster_path: Optional[str] = Field(default=None)
+    runtime: Optional[int] = Field(default=None)
+    budget: Optional[int] = Field(default=None)
+    revenue: Optional[int] = Field(default=None)
+    vote_average: Optional[float] = Field(default=None)
+    vote_count: Optional[int] = Field(default=None)
+    imdb_id: Optional[int] = Field(default=None)
+    tmdb_id: Optional[int] = Field(default=None)
+    keywords: Optional[str] = Field(default=None)
+
+class StgRating(SQLModel, table=True):
+    __tablename__ = "stg_rating"
+    key_id: int = Field(primary_key=True)
+    user_id: int = Field(index=True)
+    movie_id: int = Field(index=True)
+    rating: float
+    timestamp: Optional[int] = Field(default=None)
+
+class CastPublic(BaseModel):
+    name: str
+    role: Optional[str]
+
+class MoviePublic(BaseModel):
     id: int
-    collections: Optional[str]
-    imdb_id: Optional[str]
-    title: str
+    title: Optional[str]
+    original_title: Optional[str]
+    belongs_to_collection: Optional[str]
+    release_date: Optional[date]
     overview: Optional[str]
     tagline: Optional[str]
-    year: Optional[int]
-    vote_count: Optional[int]
+    homepage: Optional[str]
+    poster_path: Optional[str]
     vote_average: Optional[float]
-    popularity: Optional[float]
-    genres: Optional[str]
+    vote_count: Optional[int]
+    imdb_id: Optional[int]
+    tmdb_id: Optional[int]
+    genres: List[str]
+    cast: List[CastPublic]
+    keywords: List[str]
+
+class MoviesPublic(BaseModel):
+    data: List[MoviePublic]
+    count: int
+
+class MoviePublicWr(MoviePublic):
     wr: Optional[float]
-    relevance: Optional[float]
+
+class MoviePublicWithRating(MoviePublic):
+    rating: Optional[float] = None
