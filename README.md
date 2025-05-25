@@ -7,7 +7,8 @@ follow my steps.
 
 **Step1:** download this pre-train file, extract 3 folders and paste them to `movie-recomendation-system\backend\app`
 https://drive.google.com/file/d/1EA_-KxgpwDybeFwbBEK6eukqKPk0xwjr/view?usp=sharing
-result should like this 
+
+the result should like this 
 ![image](https://github.com/user-attachments/assets/8aaa640b-1912-4d18-a864-cb09c3dd5889)
 
 **Step2:** install `Docker desktop`, and `window subsystem for linux` command line 
