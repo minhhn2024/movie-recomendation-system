@@ -6,7 +6,7 @@
 follow my steps.
 
 **Step1:** download this pre-train file, extract 3 folders and paste them to `movie-recomendation-system\backend\app`
-https://drive.google.com/file/d/1EA_-KxgpwDybeFwbBEK6eukqKPk0xwjr/view?usp=sharing
+https://drive.google.com/file/d/1bIYHMrF02IeXBe5C4JMLZQtZDBcW1ycM/view?usp=sharing
 
 the result should like this 
 
