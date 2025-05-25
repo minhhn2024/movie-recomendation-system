@@ -1,8 +1,11 @@
+import logging
+
 import sentry_sdk
 from fastapi import FastAPI
 from fastapi.routing import APIRoute
 from starlette.middleware.cors import CORSMiddleware
 
+from app.api import deps
 from app.api.main import api_router
 from app.core.config import settings
 
@@ -19,6 +22,15 @@ app = FastAPI(
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
     generate_unique_id_function=custom_generate_unique_id,
 )
+
+@app.on_event("startup")
+def startup_event():
+    logging.info("App startup initiated...")
+    try:
+        deps.load_models()
+    except Exception as e:
+        logging.error(f"Failed to load models during startup: {e}")
+        raise
 
 # Set all CORS enabled origins
 if settings.all_cors_origins:

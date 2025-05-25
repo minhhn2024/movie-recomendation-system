@@ -1,3 +1,4 @@
+import logging
 import pickle
 from collections.abc import Generator
 from typing import Annotated
@@ -115,3 +116,27 @@ def get_mf_model() -> MFModel:
         _mf_model = MFModel()
     return _mf_model
 
+def load_models():
+    global _faiss_manager, _mf_model, _embedding_model
+    try:
+        logging.info("Loading FAISS indexes...")
+        _faiss_manager = FaissIndexManager()
+    except Exception as e:
+        logging.error(f"Failed to load FAISS indexes: {e}")
+        raise
+
+    try:
+        logging.info("Loading MF model...")
+        _mf_model = MFModel()
+    except Exception as e:
+        logging.error(f"Failed to load MF model: {e}")
+        raise
+
+    try:
+        logging.info("Loading embedding model...")
+        _embedding_model = SentenceTransformer(constants.EmbeddingModelConstants.MODEL_SENTENCE_TRANSFORMER)
+    except Exception as e:
+        logging.error(f"Failed to load embedding model: {e}")
+        raise
+
+    logging.info("All models loaded successfully.")
