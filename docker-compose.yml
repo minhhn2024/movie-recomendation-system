@@ -164,6 +164,7 @@ services:
       # Enable redirection for HTTP and HTTPS
       - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.middlewares=https-redirect
 
+
   frontend-dash:
     image: '${DOCKER_IMAGE_FRONTEND_DASH?Variable not set}:${TAG-latest}'
     build:
@@ -175,17 +176,17 @@ services:
       - traefik-public
       - default
     environment:
-      - BACKEND_URL=https://api.${DOMAIN}
+      - BACKEND_URL=https://api.${DOMAIN?Variable not set}
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik-public
       - traefik.constraint-label=traefik-public
 
-      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-dash-http.rule=Host(`dash.${DOMAIN}`)
+      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-dash-http.rule=Host(`dashboard.${DOMAIN?Variable not set}`)
       - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-dash-http.entrypoints=http
       - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-dash-http.middlewares=https-redirect
 
-      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-dash-https.rule=Host(`dash.${DOMAIN}`)
+      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-dash-https.rule=Host(`dashboard.${DOMAIN?Variable not set}`)
       - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-dash-https.entrypoints=https
       - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-dash-https.tls=true
       - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-dash-https.tls.certresolver=le
