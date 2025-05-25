@@ -9,6 +9,7 @@ follow my steps.
 https://drive.google.com/file/d/1EA_-KxgpwDybeFwbBEK6eukqKPk0xwjr/view?usp=sharing
 
 the result should like this 
+
 ![image](https://github.com/user-attachments/assets/8aaa640b-1912-4d18-a864-cb09c3dd5889)
 
 **Step2:** install `Docker desktop`, and `window subsystem for linux` command line 
@@ -24,4 +25,4 @@ the result should like this
 
 now in docker desktop we have a compose task 
 ![image](https://github.com/user-attachments/assets/8888224e-164f-4905-8bf8-7e76edaf7af7)
-go to visit `http://localhost:5173/` 
+go to visit `http://localhost:8050/` 
